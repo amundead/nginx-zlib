@@ -13,3 +13,6 @@ EXPOSE 80
 
 # Command to start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]
+
+
+#reupdate 1.00
