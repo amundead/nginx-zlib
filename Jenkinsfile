@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-credentials') // Jenkins credential ID for Docker Hub
-        IMAGE_NAME = 'your-dockerhub-username/your-image-name'
+        IMAGE_NAME = 'amundead/nginx-zlib'
         TAG = 'latest'  // or set a specific tag
     }
 
