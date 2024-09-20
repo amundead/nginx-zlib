@@ -27,7 +27,12 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                    // Use Jenkins credentials for Docker Hub login
+                        withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+ 
+                        // Push the image
+                        //sh "docker push ${imagename}:latest"
                         // Push the Docker image to Docker Hub
                         docker.image("${IMAGE_NAME}:${TAG}").push()
                     }
