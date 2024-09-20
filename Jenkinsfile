@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-hub-credentials') // Jenkins credential ID for Docker Hub
+        DOCKERHUB_CREDENTIALS = 'docker-hub-credentials'
         IMAGE_NAME = 'amundead/nginx-zlib'
         TAG = 'latest'  // or set a specific tag
     }
