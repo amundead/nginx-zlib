@@ -54,6 +54,8 @@ pipeline {
                     sh """
                     git config user.name "amundead"
                     git config user.email "amundead@yahoo.com"
+                    sh "touch testfile"
+                    sh "git add testfile"
                     git add .
                     git commit -m "Automated Docker image build and push by Jenkins"
                     git push origin ${BRANCH}
