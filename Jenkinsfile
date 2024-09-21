@@ -20,7 +20,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the GitHub repository where the Dockerfile is located
-                git branch: 'main', url: "git@github.com:${GITHUB_USERNAME}/${GITHUB_REPO}.git", credentialsId: 'github-ssh-key-id'
+                git branch: 'main', url: "https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}.git", credentialsId: 'github-credentials-id'
             }
         }
 
