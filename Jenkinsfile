@@ -52,8 +52,8 @@ pipeline {
                 // Push any changes made to the repository back to GitHub
                 script {
                     sh """
-                    git config user.name "test"
-                    git config user.email "test@yahoo.com"
+                    git config user.name "amundead"
+                    git config user.email "amundead@yahoo.com"
                     git add .
                     git commit -m "Automated Docker image build and push by Jenkins"
                     git push origin ${BRANCH}
