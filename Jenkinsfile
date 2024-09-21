@@ -6,7 +6,8 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials-id')
         DOCKER_IMAGE = "amundead/nginx-zlib"
         GITHUB_CREDENTIALS = credentials('github-credentials-id')
-        GITHUB_REPO = "git@github.com:amundead/nginx-zlib.git"
+//GITHUB_REPO = "git@github.com:amundead/nginx-zlib.git"
+        GITHUB_REPO = "https://github.com/amundead/nginx-zlib.git"
         BRANCH = "main"  // The branch to push to GitHub
     }
 
