@@ -13,7 +13,7 @@ pipeline {
 
         // Credentials for Docker Hub and GitHub Packages (stored in Jenkins)
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
-        GITHUB_TOKEN = credentials('github-credentials-id')
+        GITHUB_TOKEN = credentials('token_github')
     }
 
     stages {
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 // Authenticate Docker with GitHub Packages using credentials stored in Jenkins
                 script {
-                    sh "echo ${GITHUB_TOKEN} | docker login ${GITHUB_REGISTRY} -u ${GITHUB_USERNAME} --password-stdin"
+                    sh "echo ${GITHUB_TOKEN_PSW} | docker login ${GITHUB_REGISTRY} -u ${GITHUB_USERNAME} --password-stdin"
                 }
             }
         }
