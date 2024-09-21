@@ -8,7 +8,7 @@ pipeline {
         DOCKERHUB_REPO = "${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}"
         GITHUB_USERNAME = "amundead"       // GitHub username
         GITHUB_REPO = "nginx-zlib"                 // GitHub repository name
-        GITHUB_REGISTRY = "docker.pkg.github.com"
+        GITHUB_REGISTRY = "ghcr.io"
         GITHUB_REPO_URL = "${GITHUB_REGISTRY}/${GITHUB_USERNAME}/${GITHUB_REPO}/${DOCKER_IMAGE}"
 
         // Credentials for Docker Hub and GitHub Packages (stored in Jenkins)
