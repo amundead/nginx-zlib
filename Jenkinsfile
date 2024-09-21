@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Docker Hub credentials (stored in Jenkins Credentials Manager)
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials-id')
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials-id')
         DOCKER_IMAGE = "amundead/nginx-zlib"
         GITHUB_CREDENTIALS = credentials('github-credentials-id')
         GITHUB_REPO = "git@github.com:amundead/nginx-zlib.git"
