@@ -9,7 +9,7 @@ pipeline {
         GITHUB_USERNAME = "amundead"       // GitHub username
         GITHUB_REPO = "nginx-zlib"                 // GitHub repository name
         GITHUB_REGISTRY = "docker.pkg.github.com"
-        GITHUB_REPO_URL = "${GITHUB_REGISTRY}/${GITHUB_USERNAME}/${GITHUB_REPO}"
+        GITHUB_REPO_URL = "${GITHUB_REGISTRY}/${GITHUB_USERNAME}/${GITHUB_REPO}/${DOCKER_IMAGE}"
 
         // Credentials for Docker Hub and GitHub Packages (stored in Jenkins)
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
@@ -20,7 +20,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the GitHub repository where the Dockerfile is located
-                git branch: 'main', url: "https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}.git", credentialsId: 'github-credentials-id'
+                git branch: 'main', url: "https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}.git"
             }
         }
 
