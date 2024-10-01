@@ -1,53 +1,63 @@
 pipeline {
     agent any
-    
+
     environment {
-        // Replace these with your Docker Hub credentials
-        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials-id')
-        DOCKER_IMAGE = 'amundead/nginx-zlib'
-        DOCKER_TAG = 'latest' // You can dynamically set this as needed
+        GITHUB_OWNER = 'amundead'  // Your GitHub username or organization
+        GITHUB_REPOSITORY = 'nginx-zlib'  // The repository where the package will be hosted
+        DOCKERHUB_REPOSITORY = 'amundead/nginx-zlib'  // Docker Hub repository
+        IMAGE_NAME_GHCR = "ghcr.io/${GITHUB_OWNER}/${GITHUB_REPOSITORY}"  // Full image name for GitHub Packages
+        IMAGE_NAME_DOCKERHUB = "${DOCKERHUB_REPOSITORY}"  // Full image name for Docker Hub
+        TAG = 'latest'  // Tag for the Docker image
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
-                // Pull code from your version control system (e.g., Git)
-                checkout scm
+                // Checkout the source code from your repository using credentials securely
+                git branch: 'main', url: "https://github.com/${GITHUB_OWNER}/${GITHUB_REPOSITORY}.git", credentialsId: 'github-credentials-id'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image
-                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                }
-            }
-        }
-        
-        stage('Login to Docker Hub') {
-            steps {
-                script {
-                    // Login to Docker Hub using the credentials stored in Jenkins
-                    sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
+                    // Build Docker image using docker.build with --no-cache option
+                    docker.build("${IMAGE_NAME_GHCR}:${TAG}", "--no-cache .")
                 }
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Tag and Push Docker Image to GitHub Packages') {
             steps {
                 script {
-                    // Push the image to Docker Hub
-                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    // Use docker.withRegistry for secure login and push to GitHub Packages
+                    docker.withRegistry('https://ghcr.io', 'github-credentials-id') {
+                        docker.image("${IMAGE_NAME_GHCR}:${TAG}").push()
+                    }
                 }
             }
         }
-        
-        stage('Logout from Docker Hub') {
+
+        stage('Tag and Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    // Logout from Docker Hub
-                    sh "docker logout"
+                    // Use shell to manually tag the image for Docker Hub
+                    sh "docker tag ${IMAGE_NAME_GHCR}:${TAG} ${IMAGE_NAME_DOCKERHUB}:${TAG}"
+
+                    // Use docker.withRegistry for secure login and push to Docker Hub
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
+                        docker.image("${IMAGE_NAME_DOCKERHUB}:${TAG}").push()
+                    }
+                }
+            }
+        }
+
+        stage('Clean up') {
+            steps {
+                script {
+                    // Remove unused Docker images to free up space
+                    sh "docker rmi ${IMAGE_NAME_GHCR}:${TAG}"
+                    sh "docker rmi ${IMAGE_NAME_DOCKERHUB}:${TAG}"
                 }
             }
         }
@@ -55,8 +65,8 @@ pipeline {
 
     post {
         always {
-            // Cleanup any leftover Docker images from the local system
-            sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
+            // Clean up workspace after the pipeline
+            cleanWs()
         }
     }
 }
