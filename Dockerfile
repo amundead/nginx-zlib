@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y zlib1g-dev
 
 # Add labels for better maintainability
 LABEL maintainer="amundead"
-LABEL description="This Dockerfile installs Nginx with zlib library"
+LABEL description="This Dockerfile installs Nginx with the Zlib library"
 
 # Expose port 80
 EXPOSE 80
